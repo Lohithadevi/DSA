@@ -1,56 +1,42 @@
 class Solution {
-    public boolean para(StringBuilder sb)
-    {
+    public List<String> generateParenthesis(int n) {
+       
+        ArrayList<String> res=new ArrayList<>();
+         if(n==0) return res;
+        StringBuilder sb=new StringBuilder();
         Stack<Character> st=new Stack<>();
-        for(int i=0;i<sb.length();i++)
-        {
-            char c=sb.charAt(i);
-            if(c==')')
-            {
-                if(st.isEmpty())
-                {
-                    return false;
-                }
-                st.pop();
-            }
-            else
-            {
-                st.push('(');
-            }
-        }
-        return st.isEmpty();
+        fun(sb,res,st,n,0);
+        return res;
     }
-    public void fun(StringBuilder sb,int n1,int n2,ArrayList<String> list,int n,int i)
+    public static void fun (StringBuilder sb, ArrayList<String> res , Stack<Character> st,int n, int curr)
     {
-    
-        if(n1==n && n2==n)
+        if(curr==n*2)
         {
-            if(para(sb))
+            if(st.isEmpty())
             {
-                list.add(""+sb);
+                res.add(sb.toString());
+                
             }
             return;
         }
-        if(n1<n)
-        {
+        sb.append('(');
+        st.push('(');
+        fun(sb,res,st,n,curr+1);
+        sb.deleteCharAt(sb.length()-1);
         
-            StringBuilder s1=new StringBuilder(sb);
-            s1.append('(');
-            fun(s1,n1+1,n2,list,n,i);
-        }
-        if(n2<n)
+        st.pop();
+        if(!st.isEmpty())
         {
-            
-             StringBuilder s2=new StringBuilder(sb);
-             s2.append(')');
-             fun(s2,n1,n2+1,list,n,i);
+            char c=st.peek();
+            if(c=='(')
+            {
+                sb.append(')');
+                st.pop();
+                fun(sb,res,st,n,curr+1);
+                sb.deleteCharAt(sb.length()-1);
+                st.push('(');
+            }
         }
-       
-    }
-    public List<String> generateParenthesis(int n) {
-        ArrayList<String> list=new ArrayList<>();
-        StringBuilder sb=new StringBuilder();
-        fun(sb,0,0,list,n,0);
-        return list;
+        return;
     }
 }
